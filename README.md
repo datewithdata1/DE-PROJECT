@@ -133,3 +133,48 @@ sudo systemctl restart nginx
 ```
 
 Visiting your EC2 instance's public IP address in a browser confirms that your Flask application is now accessible through Nginx, completing the deployment process.
+
+
+
+# Create Lambda Layers
+To create layers for your Lambda handler, you need to package the required dependencies and libraries into a zip file and then upload it as a layer in the AWS Lambda console or through the AWS CLI. Here are the steps to create layers for your Lambda handler:
+
+1. **Create a Directory for the Layer:**
+   Create a directory to organize the files that will be included in your layer.
+
+   ```bash
+   mkdir lambda_layer
+   cd lambda_layer
+   ```
+
+2. **Install Dependencies:**
+   Install the required dependencies (e.g., `pandas`, `boto3`, etc.) into the directory. You can use a virtual environment to avoid conflicts with your system's libraries.
+
+   ```bash
+   pip install pandas -t .
+   pip install boto3 -t .
+   ```
+
+   The `-t .` flag tells `pip` to install the packages in the current directory.
+
+3. **Remove Unnecessary Files:**
+   Remove any unnecessary files, such as test files or documentation, to keep the layer size smaller.
+
+4. **Create a Zip File:**
+   Create a zip file containing the contents of the directory.
+
+   ```bash
+   zip -r lambda_layer.zip .
+   ```
+
+5. **Upload as a Layer:**
+   Open the AWS Lambda Console, navigate to the Layers section, and click "Create Layer." Provide a name, description, and upload the zip file.
+
+
+6. **Attach the Layer to Your Lambda Function:**
+   Open your Lambda function in the AWS Lambda Console. In the "Designer" section, click "Layers" and then "Add a layer." Select the layer you created.
+
+7. **Test Your Lambda Function:**
+   After attaching the layer, test your Lambda function to ensure that it can access the libraries from the layer.
+
+By following these steps, you can create and attach layers to your Lambda function, allowing you to manage dependencies separately and keep your Lambda deployment package smaller.
